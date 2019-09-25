@@ -1,0 +1,47 @@
+<head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<img src="bar1.png" height="45" width="45">
+				<input type="range"min="10" max="100" value="40" class="slider" id="size_slider">
+				<img src="bar2.png" height="45" width="45">
+			</div>
+			<div class="col">
+				<img src="turtle.png" height="45" width="45">
+				<input type="range" min="1" max="100" value="50" class="slider" id="speed_slider">
+				<img src="zajonc.png" height="40" width="40">
+			</div>
+			<div class="col">
+				<select id='sort_select'>
+					<option value="1">selection</option>
+					<option value="2">insert</option>
+					<option value="3">cocktail</option>
+					<option value="5">bogo</option>
+					<option value="4">merge</option>
+
+				</select>
+				<button class="btn btn-primary" id='sort'>sort</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<h1></h1>
+				<canvas id='chart'></canvas>
+			</div>
+		</div>
+	</div>
+</body>
+
+
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+<script type="text/javascript" src="sort.js"></script>
+
+

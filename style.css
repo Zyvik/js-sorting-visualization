@@ -1,0 +1,16 @@
+.slidecontainer {
+	width: 70%;
+}
+
+.slider {
+	-webkit-appearance: none;  /* Override default CSS styles */
+	appearance: none;
+	width: 70%; /* Full-width */
+	height: 10px; /* Specified height */
+	background: #74baff; /* Grey background */
+	outline: none; /* Remove outline */
+	opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+	-webkit-transition: .2s; /* 0.2 seconds transition on hover */
+	transition: opacity .2s;
+	border-radius: 10px;
+}
