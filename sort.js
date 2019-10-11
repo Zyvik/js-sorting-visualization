@@ -1,23 +1,30 @@
 function stop(){
 	// enables sliders, hides stop button, displays start button
 	stop_array[0] = true;
-	start_btn.innerHTML = 'sort;';
+	start_btn.innerHTML = "<i class='fa fa-play fa-2x' aria-hidden='true'></i>";
+	start_btn.className = "btn btn-lg btn-primary ml-3";
 	size_slider.disabled = false; 
 	speed_slider.disabled = false;
+	reload_btn.disabled = false;
+	select_object.disabled = false;
+	data_type_select.disabled = false;
 }
 
 function start(){
 	// diables sliders, dispalys stop button, hides start button
 	stop_array[0] = false;
-	start_btn.innerHTML = 'stop';
+	start_btn.innerHTML = "<i class='fa fa-stop fa-2x' aria-hidden='true'></i>";
+	start_btn.className = "btn btn-lg btn-danger ml-3";
 	// stop_btn.style = 'display: block;';
 	size_slider.disabled = true; 
-	//speed_slider.disabled = true;
+	reload_btn.disabled = true;
+	select_object.disabled = true;
+	data_type_select.disabled = true;
 }
 
 function create_dataset(entrances){
 	//creates starting dataset
-	if (3 <= entrances <= 100){
+	if (2 <= entrances <= 100){
 		var dataset = [];
 		for (i=0; i<entrances; i++){
 			dataset.push(Math.floor(Math.random() * 100 + 1));
@@ -111,7 +118,7 @@ async function selection_sort(chart, data, background_array, sleep_time, stop_ar
 				return;
 			}
 			// wait and update chart
-			await sleep(sleep_time.value);
+			await sleep(-sleep_time.value);
 			selection_sort_colors(background_array, i, j, swap_index);
 			chart.update();
 		}
@@ -151,7 +158,7 @@ async function insertion_sort(chart, dataset, background_array, sleep_time, stop
 				return
 			}
 
-			await sleep(sleep_time.value);
+			await sleep(-sleep_time.value);
 			j -= 1;
 		}
 		dataset[j+1] = x;
@@ -194,7 +201,7 @@ async function cocktail_sort(chart, dataset, background_array, sleep_time){
 			// update chart
 			cocktail_sort_colors(background_array, i+1, start, end);
 			chart.update();
-			await sleep(sleep_time.value);
+			await sleep(-sleep_time.value);
 		}
 
 		//if nothing was swapped then dataset is in order
@@ -219,7 +226,7 @@ async function cocktail_sort(chart, dataset, background_array, sleep_time){
 			//update chart
 			cocktail_sort_colors(background_array, i-1, start, end);
 			chart.update();
-			await sleep(sleep_time.value);
+			await sleep(-sleep_time.value);
 		}
 		start +=1;
 	}
@@ -258,7 +265,7 @@ async function merge_sort(chart, dataset, background_array, speed_slider, stop_a
 				return;
 			}
 
-			await sleep(speed_slider.value);
+			await sleep(-speed_slider.value);
 		
 		}
 		for (let i=0; i<temp_array.length; i++){
@@ -271,7 +278,7 @@ async function merge_sort(chart, dataset, background_array, speed_slider, stop_a
 				stop();
 				return;
 			}
-			await sleep(speed_slider.value);
+			await sleep(-speed_slider.value);
 		}
 	}
 	stop();
@@ -337,7 +344,7 @@ async function bogo_sort(chart, dataset, background_array, speed_slider, stop_ar
 
 			bogo_colors(background_array, i);
 			chart.update();
-			await sleep(speed_slider.value);
+			await sleep(-speed_slider.value);
 
 			if (dataset[i]<=dataset[i+1]){
 				sorted = true;
@@ -349,6 +356,8 @@ async function bogo_sort(chart, dataset, background_array, speed_slider, stop_ar
 		if (!sorted){
 			bogo_shuffle(dataset);
 		} else {
+			fill_background_array(background_array,'rgba(0, 220, 0, 0.4)');
+			chart.update();
 			stop();
 			return;
 		}
@@ -374,6 +383,127 @@ function bogo_colors(background_array, currentIndex){
 	background_array[currentIndex]= 'rgba(220, 250, 0, 0.4)'; //yellow
 }
 
+async function quick_sort(chart, dataset, background_array, speed_slider, stop_array){
+	// iterative quicksort (because recursive function wont work with async)
+	// stack keeps information about whitch indexes are sorted (true = sorted)
+	var stack = new Array(dataset.length).fill(false);
+	stack.push(true); // true at the end to ensure that function will always find right border
+	var sorted = false;
+
+	var l_border = 0;
+	var r_border = stack.length-1;
+	while (!sorted){
+		// finds 1st unsorted index, sets it as left border for sorting
+		for (let i=l_border; i<stack.length; i++){
+			if (!stack[i]){
+				l_border = i;
+				break;  //breaks for
+			}
+			l_border = -1;
+		}
+		// if there is false value in stack - sort, else break
+		if (l_border > -1){
+			// finds 1st true value after left border, sets right border
+			for (let i=l_border; i<stack.length; i++){
+				if (stack[i]){
+					r_border=i-1;
+					break;
+				}
+			}
+			// ACTUAL SORTING
+			var pivot_index = r_border; //set last index to sort as pivot
+			var left = l_border;  //left 'finger'
+			var right = pivot_index-1; //right 'finger'
+			while(true){
+				// sets left finger (1st value that is greater than pivot)
+				for (let i=left; i<pivot_index; i++){
+					left = -1;
+
+					if (stop_array[0]){
+						stop();
+						return;
+					}
+
+					quick_sort_colors(background_array, stack, pivot_index, left, right, i);
+					chart.update();
+					await sleep(-speed_slider.value);
+
+					if (dataset[i]>dataset[pivot_index]){
+						left = i;
+						break;
+					}
+				}
+				// if left finger doesnt exists then pivot is on the right place
+				if (left == -1){
+					stack[pivot_index] = true;
+					break;
+				} else {
+					// sets right finger (last value that is lesser than pivot)
+					for (let i=right; i>=0; i--){
+						right = -1;
+
+						if (stop_array[0]){
+							stop();
+							return;
+						}
+
+						quick_sort_colors(background_array, stack, pivot_index, left, right, i);
+						chart.update();
+						await sleep(-speed_slider.value);
+
+						if (dataset[i]<dataset[pivot_index]){
+							right = i;
+							break;
+						}
+					}
+					// if left > right swap left and pivot, then pivot will be on the right place
+					if (left > right){
+						swap(dataset, left, pivot_index);
+						stack[left] = true;
+						break;
+					} else{
+						//swap left and right, and continiue with same borders
+						swap(dataset, left, right);
+					}
+				}
+			}
+
+		} else{
+			sorted = true;
+			fill_background_array(background_array, 'rgba(0, 220, 0, 0.4)');
+			chart.update();
+			stop();
+		}
+	}	
+}
+
+function quick_sort_colors(background_array, sorted_array, pivot, left_finger, right_finger, current_index){
+	// blue - unsorted; green - sorted
+	for (let i=0; i<background_array.length; i++){
+		if (sorted_array[i]){
+			background_array[i] = 'rgba(0, 220, 0, 0.4)'; // green
+		} else {
+			background_array[i] = 'rgba(0, 128, 255, 0.4)'; //blue
+		}
+	}
+	// yellow - current
+	background_array[current_index] = 'rgba(220, 250, 0, 0.4)'; //yellow
+	background_array[pivot] = 'rgba(156, 2, 222, 0.4)'; // purple ?
+	if (left_finger>-1){
+		background_array[left_finger] = 'rgba(255, 0, 0, 0.4)'; //red
+	}
+	if (right_finger>-1){
+		background_array[right_finger] = 'rgba(246, 112, 3, 0.4)'; //orange
+	}
+}
+
+function swap(dataset, x, y){
+	// swaps two values in dataset
+	var temp = dataset[x];
+	dataset[x] = dataset[y];
+	dataset[y] = temp;
+}
+
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -386,7 +516,7 @@ function select_sorting(){
 	start();
 
 	switch (sorting_id){
-		case '1': 
+		case '1':
 		selection_sort(chart_o, dataset, background_array, speed_slider, stop_array);
 		break;
 
@@ -405,19 +535,83 @@ function select_sorting(){
 		case '5':
 		bogo_sort(chart_o, dataset, background_array, speed_slider, stop_array);
 		break;
+
+		case '6':
+		quick_sort(chart_o, dataset, background_array, speed_slider, stop_array);
+		break;
 	}
 }
 
-function update_dataset(dataset, background_array, chart, size_slider){
-	for (let i=0; i<size_slider.value; i++){
-		chart.data.datasets.forEach((dataset) => {
-			dataset.data[i] = Math.floor(Math.random() * 100 + 1);
-			dataset.backgroundColor[i] = 'rgba(0, 128, 255, 0.4)';
-		});
-		chart.data.labels[i] = '';
+function change_legend(select_object){
+	var sorting_id = select_object.options[select_object.selectedIndex].value;
+	var legend_span = document.getElementById('legend_span');
+	switch (sorting_id){
+		case '1':
+		legend_span.innerHTML = "<span><svg width='20' height='20'><rect width='20' height='20' style='fill:rgb(0, 0, 204);stroke-width:3;stroke:rgb(0,0,0)' /></svg> - minimum value </span><br>";
+		break;
+
+		case '6':
+		legend_span.innerHTML = "<span><svg width='20' height='20'><rect width='20' height='20' style='fill:rgb(0, 0, 204);stroke-width:3;stroke:rgb(0,0,0)' /></svg> - minimum value </span><br>";
+		legend_span.innerHTML += "<span><svg width='20' height='20'><rect width='20' height='20' style='fill:rgb(0, 0, 204);stroke-width:3;stroke:rgb(0,0,0)' /></svg> - left \"finger\" (1st value greater than pivot) </span><br>";
+		legend_span.innerHTML += "<span><svg width='20' height='20'><rect width='20' height='20' style='fill:rgb(0, 0, 204);stroke-width:3;stroke:rgb(0,0,0)' /></svg> - right \"finger\" (last value value less than pivot) </span><br>";
+		break;
+
+		default:
+		legend_span.innerHTML = "";
+		break;
 	}
+}
+function update_dataset(dataset, background_array, chart, size_slider){
+	var select_object = document.getElementById('data_type_select');
+	var data_type_id = select_object.options[select_object.selectedIndex].value;
+
+	switch (data_type_id){
+		case '1':
+		//Random
+		for (let i=0; i<size_slider.value; i++){
+			chart.data.datasets.forEach((dataset) => {
+				dataset.data[i] = Math.floor(Math.random() * 100 + 1);
+				dataset.backgroundColor[i] = 'rgba(0, 128, 255, 0.4)';
+			});
+			chart.data.labels[i] = '';
+		}
+		break;
+
+		case '2':
+		//Inverted
+		for (let i=0; i<size_slider.value; i++){
+			chart.data.datasets.forEach((dataset) => {
+				dataset.data[i] = size_slider.value-i;
+				dataset.backgroundColor[i] = 'rgba(0, 128, 255, 0.4)';
+
+			});
+			chart.data.labels[i]='';
+		}
+		break;
+
+		case '3':
+		//Almost sorted
+		for (let i=0; i<size_slider.value; i++){
+			chart.data.datasets.forEach((dataset) => {
+				dataset.data[i] = i+1;
+				dataset.backgroundColor[i] = 'rgba(0, 128, 255, 0.4)';
+
+			});
+			chart.data.labels[i]='';
+		}
+		//swap 2 values in sorted dataset
+		var x, y;
+		x = y = 0;
+		while (x==y){
+			x = Math.floor(Math.random() * size_slider.value);
+			y = Math.floor(Math.random() * size_slider.value);
+			}
+		dataset[x] = y+1;
+		dataset[y] = x+1;
+	}
+
+	// pop records if previous dataset was larger 
 	if (dataset.length>size_slider.value){
-		console.log(parseInt(size_slider.value,10));
 		for (let i=parseInt(dataset.length,10) - parseInt(size_slider.value,10); i>0; i--){
 			chart.data.datasets.forEach((dataset) => {
 				dataset.data.pop();
@@ -429,8 +623,10 @@ function update_dataset(dataset, background_array, chart, size_slider){
 	chart.update();
 }
 
+
+
 var stop_array = [true]; // array because arrays are mutable
-var dataset = create_dataset(3);
+var dataset = create_dataset(50);
 var background_array = create_background_array(dataset);
 console.log(dataset);
 
@@ -438,6 +634,10 @@ var chart_o = create_chart(dataset, background_array);
 var start_btn = document.getElementById('sort');
 var size_slider = document.getElementById('size_slider');
 var speed_slider = document.getElementById('speed_slider');
+var reload_btn = document.getElementById('reload');
+var select_object = document.getElementById('sort_select');
+var data_type_select = document.getElementById('data_type_select');
+
 
 start_btn.addEventListener("click", function(){
 	if (stop_array[0]){
@@ -445,7 +645,12 @@ start_btn.addEventListener("click", function(){
 	} else {
 		stop();
 	}
-	
 },false);
+select_object.addEventListener("change", function(){change_legend(select_object);})
 size_slider.addEventListener("input", function(){update_dataset(dataset, background_array, chart_o, size_slider);}, false);
+reload_btn.addEventListener("click", function(){update_dataset(dataset, background_array, chart_o, size_slider);}, false);
+data_type_select.addEventListener("change", function(){update_dataset(dataset, background_array, chart_o, size_slider);}, false);
 
+change_legend(select_object); // browsers sometimes remembers last selected item (legend is wrong because event isnt called)
+
+console.log(dataset);
