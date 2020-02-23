@@ -2,23 +2,25 @@
 <head>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Permanent+Marker&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Cinzel&display=swap" rel="stylesheet"> 
 	<link rel="stylesheet" type="text/css" href="style.css">
 
 </head>
 
 <body style="margin: 0; height: 100%; background-image: linear-gradient(-225deg, #FFFEFF 0%, #D7FFFE 100%);">
-	<div class="container">
-		<div class="alert alert-info mt-4" role="alert">
-		  <h4>Select data structure, dataset size, visualization speed and sorting algorithm, then press sort.</h4>
+	<div class="container mt-4" class="text-center">
+		<div class="d-flex justify-content-center">
+		  <h1 style="font-family: 'Cinzel', serif; padding-bottom: 15px;">Sorting algorithms visualisation</h1>
 		</div>
 		
-		<div class="row mt-4">
-			<div class="">
-				<div class="col-md d-flex justify-content-center">
+		<div class="row mt-4 mb-4">
+			<div class="d-flex justify-content-center">
+				<div class="col-md">
 					<div class="form-inline">
 						<div class="form-group">
 							
-							<label for="data_type_select">Data structure:</label>
+							<label for="data_type_select" style="font-family: 'Cinzel', serif;">Data structure:</label>
 							<select id='data_type_select' class="form-control ml-2">
 								<option value="1">random</option>
 								<option value="2">inverted</option>
@@ -43,19 +45,18 @@
 			</div>
 		</div>
 		<h1></h1>
-		<div class="row">
+		<div class="row mb-4">
 			<div class="col mt-4">
 				<div class="d-flex justify-content-center">
 				<div class="form-inline">
 					<div class="form-group">
-						<label for="sort_select"><h3>Sorting algorithm:</h3></label>
+						<label for="sort_select"><h2 style="font-family: 'Cinzel', serif;"><strong>select algorithm:</strong></h2></label>
 						<select id='sort_select' class="form-control form-control-lg ml-3">
-							<option value="1">selection</option>
-							<option value="2">insert</option>
-							<option value="3">cocktail</option>
-							<option value="5">bogo</option>
-							<option value="4">merge</option>
-							<option value="6">quick</option>
+							<option value="1">selection sort</option>
+							<option value="2">insertion sort</option>
+							<option value="3">cocktail sort</option>
+							<option value="6">quick sort</option>
+							<option value="5">bogo sort</option>
 						</select>
 						<button class="btn btn-lg btn-primary ml-3" id='sort' style="font-size: 0.9rem;"><i class="fa fa-play fa-2x" aria-hidden="true"></i></button>
 					</div>

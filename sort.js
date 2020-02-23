@@ -547,13 +547,13 @@ function change_legend(select_object){
 	var legend_span = document.getElementById('legend_span');
 	switch (sorting_id){
 		case '1':
-		legend_span.innerHTML = "<span><svg width='20' height='20'><rect width='20' height='20' style='fill:rgb(0, 0, 204);stroke-width:3;stroke:rgb(0,0,0)' /></svg> - minimum value </span><br>";
+		legend_span.innerHTML = "<span><svg width='20' height='20'><rect width='20' height='20' style='fill:rgb(127, 0, 233);stroke-width:3;stroke:rgb(0,0,0)' /></svg> - minimum value </span><br>";
 		break;
 
 		case '6':
-		legend_span.innerHTML = "<span><svg width='20' height='20'><rect width='20' height='20' style='fill:rgb(0, 0, 204);stroke-width:3;stroke:rgb(0,0,0)' /></svg> - minimum value </span><br>";
-		legend_span.innerHTML += "<span><svg width='20' height='20'><rect width='20' height='20' style='fill:rgb(0, 0, 204);stroke-width:3;stroke:rgb(0,0,0)' /></svg> - left \"finger\" (1st value greater than pivot) </span><br>";
-		legend_span.innerHTML += "<span><svg width='20' height='20'><rect width='20' height='20' style='fill:rgb(0, 0, 204);stroke-width:3;stroke:rgb(0,0,0)' /></svg> - right \"finger\" (last value value less than pivot) </span><br>";
+		legend_span.innerHTML = "<span><svg width='20' height='20'><rect width='20' height='20' style='fill:rgb(156, 2, 222);stroke-width:3;stroke:rgb(0,0,0)' /></svg> - pivot </span><br>";
+		legend_span.innerHTML += "<span><svg width='20' height='20'><rect width='20' height='20' style='fill:rgb(255, 0, 0);stroke-width:3;stroke:rgb(0,0,0)' /></svg> - left \"finger\" (1st value greater than pivot) </span><br>";
+		legend_span.innerHTML += "<span><svg width='20' height='20'><rect width='20' height='20' style='fill:rgb(246, 112, 0);stroke-width:3;stroke:rgb(0,0,0)' /></svg> - right \"finger\" (last value value lesser than pivot) </span><br>";
 		break;
 
 		default:
@@ -651,6 +651,4 @@ size_slider.addEventListener("input", function(){update_dataset(dataset, backgro
 reload_btn.addEventListener("click", function(){update_dataset(dataset, background_array, chart_o, size_slider);}, false);
 data_type_select.addEventListener("change", function(){update_dataset(dataset, background_array, chart_o, size_slider);}, false);
 
-change_legend(select_object); // browsers sometimes remembers last selected item (legend is wrong because event isnt called)
-
-console.log(dataset);
+change_legend(select_object); // browser sometimes remembers last selected item (legend is wrong because event isnt called)
